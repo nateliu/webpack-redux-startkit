@@ -1,36 +1,18 @@
-const stateChanger = (state, action) => {
-    if (!state) {
-        return {
-            title: {
-                text: 'Here is the title',
-                color: 'red'
-            },
-            content: {
-                text: 'Here is the content',
-                color: 'blue'
-            }
-        }
-    }
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import { PropTypes } from 'prop-types';
+import Header from './Header';
+import Content from './Content';
 
+const themeReducer = (state, action) => {
+    if (!state) return {
+        themeColor: 'red'
+    }
     switch (action.type) {
-        case 'UPDATE_TITLE_TEXT':
-            return {
-                ...state,
-                title: {
-                    ...state.title,
-                    text: action.text
-                }
-            };
-        case 'UPDATE_TITLE_COLOR':
-            return {
-                ...state,
-                title: {
-                    ...state.title,
-                    color: action.color
-                }
-            };
+        case 'CHANGE_COLOR':
+            return { ...state, themeColor: action.themeColor }
         default:
-            state;
+            return state
     }
 }
 
@@ -47,36 +29,30 @@ const createStore = (reducer) => {
     return { getState, dispatch, subscribe };
 }
 
-const renderApp = (state, oldState = {}) => {
-    if (state === oldState) return;
-    console.log('render app...');
-    renderTitle(state.title, oldState.title);
-    renderContent(state.content, oldState.content);
+const store = createStore(themeReducer);
+
+
+export default class Index extends Component {
+    getChildContext() {
+        return { store }
+    }
+
+    render() {
+        return (
+            <div>
+                <Header />
+                <Content />
+            </div>
+        )
+    }
+
 }
 
-const renderTitle = (title, oldTitle = {}) => {
-    if (title === oldTitle) return;
-    console.log('render title...');
-    const titleDOM = document.getElementById('title');
-    titleDOM.innerHTML = title.text;
-    titleDOM.style.color = title.color;
+Index.childContextTypes = {
+    store: PropTypes.object
 }
 
-const renderContent = (content, oldContent = {}) => {
-    if (content === oldContent) return;
-    console.log('render content...');
-    const contentDOM = document.getElementById('content');
-    contentDOM.innerHTML = content.text;
-    contentDOM.style.color = content.color;
-}
-
-const store = createStore(stateChanger);
-let oldState = store.getState();
-store.subscribe(() => {
-    const newState = store.getState();
-    renderApp(newState, oldState);
-    oldState = newState;
-});
-renderApp(store.getState());
-store.dispatch({ type: 'UPDATE_TITLE_TEXT', text: 'Here is the updated title' })
-store.dispatch({ type: 'UPDATE_TITLE_COLOR', color: 'green' });
+ReactDOM.render(
+    <Index />,
+    document.getElementById('app')
+);

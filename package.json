@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/nateliu/webpack-redux-startkit#readme",
   "dependencies": {
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "redux": "^3.7.2"
   },
   "devDependencies": {
