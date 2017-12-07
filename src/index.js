@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { PropTypes } from 'prop-types';
 import Header from './Header';
 import Content from './Content';
+import { Provider } from './react-redux'
 
 const themeReducer = (state, action) => {
     if (!state) return {
@@ -33,10 +34,6 @@ const store = createStore(themeReducer);
 
 
 export default class Index extends Component {
-    getChildContext() {
-        return { store }
-    }
-
     render() {
         return (
             <div>
@@ -48,11 +45,9 @@ export default class Index extends Component {
 
 }
 
-Index.childContextTypes = {
-    store: PropTypes.object
-}
-
 ReactDOM.render(
-    <Index />,
+    <Provider store ={store}>
+        <Index />
+    </Provider>,
     document.getElementById('app')
 );
