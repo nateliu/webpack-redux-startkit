@@ -4,6 +4,5 @@ This is tutorial for make a redux.
 3. Combine appState and stateChanger into one store.
 4. Add a subscribe in store to refresh the appState automaticlly.
 5. Use ...object to improve performance.
-
 6. npm install react react-dom prop-types --save
-7.
+
